@@ -10,7 +10,7 @@ Read through the entire instructions before beginning to code; later sections ma
 ## Program Description
 At start up, the *form_load* event, the program should first read in the dictionary file (which is included as a project resource). If there is an error reading in the dictionary file, it should display a MessageBox with a descriptive error message, and then exit the program. You can generate the event by double-clicking the form, or assign it through the form's event-properties.  
 
-If the file is has been correctly read, it should display the following GUI:  
+If the file has been correctly read, it should display the following GUI:  
 
 ![](images/image001.png)
 
@@ -23,8 +23,10 @@ If the user types a message and clicks Encrypt
 
 Then the program will first check to see that the message contains only lower-case letters and spaces, and that all words in the message are in the dictionary (which is true for the message above).  
 
+The program uses a random substitution cipher; because of this your encoding may have different letter-substitutions.
+
 #### Decrypting a Message
-If the user then tries to decrypt the resulting encrypted message above, they will get:  
+If the user then tries to decrypt the resulting encrypted message above, by copying and pasting it to the message window, they will get:  
 
 ![](images/image003.png)
 
@@ -71,14 +73,14 @@ To complete this assignment, you will need to complete five classes and one inte
 *	TrieWithManyChildren – implements a trie with more than one child
 *	SubstitutionCipher – encrypts and decrypts messages with a substitution cipher  
 
-The details of these classes, included required fields, properties, and methods, are listed below.  You may add other private methods if you feel they improve the code; however, you may not add any other classes, fields, properties, or public methods. In all of your code, must follow the naming conventions, as well as the other style requirements, for this class.
+The details of these classes, including required fields, properties, and methods, are listed below.  You may add other private methods if you feel they improve the code; however, you may not add any other classes, fields, properties, or public methods. In all of your code, must follow the naming conventions, as well as the other style requirements, for this class.
 
 Finally, you are ONLY allowed to use a try/catch when reading the dictionary file in SubstitutionCipher’s ReadDictionary method (see below for details). If you use try/catch blocks anywhere else, you will lose points.
 
 ### The Trie classes
 First paste-in either your own Trie-implementations from Lab-22 or the Model Solution's. Just paste the **body** of the class into the files provided.  
 
-Note: We advise against copying files-into-directories.  Visual Studios sometimes just places something like a symbolic link to the original file instead of creating a copy.  This will work fine on the original computer and create chaos with anything cloned from GitHub; like your solution will be cloned for grading. Be careful not to overwrite the namespace (Net6CryptoSolver).  
+Note: We advise against copying files-into-directories.  Visual Studio sometimes just places something like a symbolic link to the original file instead of creating a copy.  This will work fine on the original computer and create chaos with anything cloned from GitHub; like your solution will be cloned for grading. Be careful not to overwrite the namespace (Net6CryptoSolver).  
 
 You will then edit the included ITrie interface. Add the method header:
 
@@ -86,11 +88,11 @@ bool WildcardSearch(string s);
 
 You will need to implement this method in every Trie class (TrieWithNoChildren, TrieWithOneChild, and TrieWithManyChildren) as follows:
 
-This method accepts strings that include wildcard characters (‘?’). The method should return true if the trie consists of any word that matches s (where ANY character can match the ‘?’ characters), and false otherwise. For example, if s was “?a?a?a”, then WildcardSearch should return true because “banana” (and possibly other words) is a word in the trie and matches that wildcard search, since each ‘?’ can be matched by any letter. If the argument passed in is null, throw an ArgumentNullException.
+This method accepts strings that include wildcard characters (‘?’). The method should return true if the trie contains any word that matches s (where ANY character can match the ‘?’ characters), and false otherwise. For example, if s was “?a?a?a”, then WildcardSearch should return true because “banana” (and possibly other words) is a word in the trie and matches that wildcard search, since each ‘?’ can be matched by any letter. If the argument passed in is null, throw an ArgumentNullException.
 
 
 ### The SubstitutionCipher Class
-The SubstitutionCipher class should handle encrypting and decrypting a message with a substation cipher. It should contain the following private fields:  
+The SubstitutionCipher class should handle encrypting and decrypting a message with a substitution cipher. It should contain the following private fields:  
 *	Random _generator, which is initially a new Random object (use the no-argument constructor for Random, which will seed the random number generator to the system clock time)
 
 *	ITrie _words, which is initially a new TrieWithNoChildren
@@ -99,7 +101,7 @@ And the following methods:
 *	private bool AllWords(string msg) – Checks whether all words in msg are in the dictionary (the _words trie)
 
 *	public string Encrypt(string msg) – Applies a random substitution cipher to encrypt msg, and returns the resulting ciphertext. Encrypt can assume that msg will be just lower-case letters and spaces.
-    * First come up with a cypher that maps a cypher-letter to each plain-text letter in the message. Each cypher-letter can represent 0 or 1 plain-text letter.  You will be using Random.Next(int maxValue) to  "pick" the cypher-letter.  You will need a data structure to hold the (plain-letter, cypher-letter) pairs as well as a way to ensure each cypher-letter is used at most once.   
+    * First come up with a cypher that maps a cypher-letter to each plain-text letter in the message. Each cypher-letter can represent 0 or 1 plain-text letter.  You will be using [Random.Next(int maxValue)](https://learn.microsoft.com/en-us/dotnet/api/system.random.next?view=net-6.0) to  "pick" the cypher-letter.  You will need a data structure to hold the (plain-letter, cypher-letter) pairs as well as a way to ensure each cypher-letter is used at most once. One way is to keep track of the characters used.  When you need the next cipher-letter, keep generating new ints until you generate a value that is not "in" the used-list.
     * Then you will use the cypher to encode the plain text.  
 
 
@@ -111,9 +113,11 @@ And the following methods:
 
 *	public bool Solved(StringBuilder[] plain) – Returns whether the words in plain are a completed decryption (with no ? characters and with the _words trie containing all the words)
 
-*	private int[] NextPos(StringBuilder[] plain) – Returns a size-2 array of the position of the next ? character in plain (position 0: the index of the first word in plain with a ?, and position 1: the index of the first ? within that word)
+*	private int[]? NextPosition(StringBuilder[] plain) – Returns a size-2 array of the position of the next ? character in plain (position 0: the index of the first word in plain with a ?, and position 1: the index of the first ? within that word).  If there are no wildcards return null.
 
 *	private void Substitute(char orig, char replace, string[] cipher, StringBuilder[] plain) – For all occurrences of orig in cipher, substitutes the corresponding position with replace in plain
+
+>  Assume you call the method where the arguments are orig = 'n', replace = 'a', cipher ={"fnj", "wnj"} and plain = {{"b", "?", "?"},{"?", "?", "?"}}.  **Leaving** the method, plain is now = = {{"b", "a", "?"},{"?", "a", "?"}}.
 
 *	private bool DecryptionSearch(string[] cipher, StringBuilder[] partial, bool[] alphaUsed) – performs a recursive search to solve the cryptogram. See below for details on the algorithm.
 
@@ -130,7 +134,7 @@ UserInterface should represent the user interface for the project. It should con
 * SubstitutionCipher _cipher, which is initially a new SubstitutionCipher object
 
 UserInterface should also contain the following methods:
-*	Load event for the form – calls ReadDictionary on _cipher to read in the words, passing ”..\\..\\..\\data\\dictionary.txt” as the file name. (The dictionary.txt file is included in the starter repository in the data folder.) If there was an error reading the dictionary, it displays a MessageBox with an error message and exits the program.
+*	Load event for the form – calls ReadDictionary on _cipher to read in the words, passing ”..\\..\\..\\data\\dictionary.txt” as the file name. (The dictionary.txt file is included in the starter repository in the data folder.) If there was an error reading the dictionary, it displays a MessageBox with an error message and exits the program. If an exception occurs while reading the file or loading the dictionary, print a MessageBox with the error and exit the program.
 
 *	Click event for the Encrypt button – It should use both ContainsInvalid and AllWords from SubsitutionCipher to check for errors, and should then call Encrypt in SubstitutionCipher to encrypt the message in the top text box.
     * If the user clicks the Encrypt button, the program should first check whether the message in the top text box contains characters other than lower-case letters or spaces. If it does, then the error message “Error: Invalid characters. Only lowercase letters and spaces allowed.” should be placed in the bottom text box.
@@ -157,7 +161,7 @@ DecryptionSearch takes the following parameters:
 DecryptionSearch should then use the following algorithm:
 * If partial represents a solved puzzle (i.e. it contains no ? characters, and each StringBuilder is a word in the trie), it will return true.
 * Otherwise, if any word in partial does NOT have a possible match in the trie (call its WildcardSearch method), return false.
-* Otherwise, extend the recursive search by finding the first location of a ‘?’ in the StringBuilders in the partial array (word index and character position within the word). Then for each unused lowercase letter, 'l' (consult alphaUsed), it will find the ciphertext value, v, (in cipher) at that same word and character position. For all such occurrences of v in cipher, replace the corresponding locations in partial with 'l'. Recursively call DecryptionSearch with that substitution, and then if necessary, backtrack by undoing the recent substitution.  
+* Otherwise, extend the recursive search by finding the first location of a ‘?’ in the StringBuilders in the partial array (word index and character position within the word). Get the ciphertext value, v, (in cipher) at that same word and character position. Then for each unused lowercase letter, ‘l’ (consult alphaUsed), use the Substitute method to replace the appropriate locations in partial with ‘l’ (i.e., replace the characters at locations in which cipher contains v). Recursively call DecryptionSearch with that substitution, and then if necessary, backtrack by undoing the recent substitution.  
     *   To backtrack, set the index in alphaUsed to false and call Substitute to replace 'l' with '?'.
 
 Make use of your helper methods (Subsititute, NextPos, Solved, and PossibleCompletion)!
@@ -165,10 +169,10 @@ Make use of your helper methods (Subsititute, NextPos, Solved, and PossibleCompl
 ## Testing
 When you are ready to test your program, open the TrieTests.cs and CipherTests.cs files in the KSU.CIS300.CryptoSolver.Tests project. Each of these files include test cases that have been commented out using /* … */ tags. (The test cases were commented out so they wouldn’t cause build errors before your code was finished.)
 
-Uncomment the tests cases in both TrieTests.cs and CipherTests.cs, run them, and ensure that they all pass. Additionally, make sure you program works correctly on all the test cases shown in the “Sample Walkthroughs” section of this document. We also recommend testing your program on your own sample messages (first encrypting them and then decrypting them).
+Uncomment the tests cases in both TrieTests.cs and CipherTests.cs, run them, and ensure that they all pass. Additionally, make sure your program works correctly on all the test cases shown in the “Sample Walkthroughs” section of this document. We also recommend testing your program on your own sample messages (first encrypting them and then decrypting them).
 
 ### Performance
-All of the test cases should finish within the allotted one second, and all of the tests in the “Sample Walkthroughs” section should also finish in less than a second each. On your own messages, you may encounter some cases that take much longer to decrypt, such as a very short message whose words contain a lot of unique letters. This is to be expected. In general, your program will behave the fastest when decrypting messages with more words and with more common letters among the different words.  
+All of the test cases should finish within the allotted two seconds, and all of the tests in the “Sample Walkthroughs” section should also finish in less than a couple of seconds each. On your own messages, you may encounter some cases that take much longer to decrypt, such as a very short message whose words contain a lot of unique letters. This is to be expected. In general, your program will behave the fastest when decrypting messages with more words and with more common letters among the different words.  
 
 Encryption should always appear nearly instantaneous, no matter the length of the message.  
 
