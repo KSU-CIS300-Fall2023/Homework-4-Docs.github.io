@@ -117,7 +117,7 @@ And the following methods:
 
 *	private void Substitute(char orig, char replace, string[] cipher, StringBuilder[] plain) – For all occurrences of orig in cipher, substitutes the corresponding position with replace in plain
 
->  Assume you call the method where the arguments are orig = 'n', replace = 'a', cipher ={"fnj", "wnj"} and plain = {{"b", "?", "?"},{"?", "?", "?"}}.  **Leaving** the method, plain is now = = {{"b", "a", "?"},{"?", "a", "?"}}.
+>  Assume you call the method where the arguments are orig = 'n', replace = 'a', cipher ={"fnj", "wnj"} and plain = {{"b", "?", "?"},{"?", "?", "?"}}.  **Leaving** the method, plain is now = = {{"b", "a", "?"},{"?", "a", "?"}}.   
 
 *	private bool DecryptionSearch(string[] cipher, StringBuilder[] partial, bool[] alphaUsed) – performs a recursive search to solve the cryptogram. See below for details on the algorithm.
 
