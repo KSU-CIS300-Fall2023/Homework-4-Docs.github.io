@@ -116,8 +116,8 @@ And the following methods:
 *	private int[]? NextPosition(StringBuilder[] plain) – Returns a size-2 array of the position of the next ? character in plain (position 0: the index of the first word in plain with a ?, and position 1: the index of the first ? within that word).  If there are no wildcards return null.
 
 *	private void Substitute(char orig, char replace, string[] cipher, StringBuilder[] plain) – For all occurrences of orig in cipher, substitutes the corresponding position with replace in plain 
-    * Assume you call the method where the arguments are orig is 'n', replace is 'a', cipher is {"fnj", "wnj"} and plain is {{"b", "?", "?"},{"?", "?", "?"}}.  
-    * **Leaving** the method, plain is now  { {"b", "a", "?"}, {"?", "a", "?"} } .   
+    * Assume you call the method where the arguments are orig is 'n', replace is 'a', cipher is {"fnj", "wnj"} and plain is '{{"b", "?", "?"},{"?", "?", "?"}}'.  
+    * **Leaving** the method, plain is now  '{ {"b", "a", "?"}, {"?", "a", "?"} }' .   
 
 *	private bool DecryptionSearch(string[] cipher, StringBuilder[] partial, bool[] alphaUsed) – performs a recursive search to solve the cryptogram. See below for details on the algorithm.
 
