@@ -98,7 +98,7 @@ The SubstitutionCipher class should handle encrypting and decrypting a message w
 *	ITrie _words, which is initially a new TrieWithNoChildren
 
 And the following methods:
-*	private bool AllWords(string msg) – Checks whether all words in msg are in the dictionary (the _words trie)
+*	public bool AllWords(string msg) – Checks whether all words in msg are in the dictionary (the _words trie)
 
 *	public string Encrypt(string msg) – Applies a random substitution cipher to encrypt msg, and returns the resulting ciphertext. Encrypt can assume that msg will be just lower-case letters and spaces.
     * First come up with a cypher that maps a cypher-letter to each plain-text letter in the message. Each cypher-letter can represent 0 or 1 plain-text letter.  You will be using [Random.Next(int maxValue)](https://learn.microsoft.com/en-us/dotnet/api/system.random.next?view=net-6.0) to  "pick" the cypher-letter.  You will need a data structure to hold the (plain-letter, cypher-letter) pairs as well as a way to ensure each cypher-letter is used at most once. One way is to keep track of the characters used.  When you need the next cipher-letter, keep generating new ints until you generate a value that is not "in" the used-list.
@@ -115,7 +115,7 @@ And the following methods:
 
 *	private int[]? NextPosition(StringBuilder[] plain) – Returns a size-2 array of the position of the next ? character in plain (position 0: the index of the first word in plain with a ?, and position 1: the index of the first ? within that word).  If there are no wildcards return null.
 
-*	private void Substitute(char orig, char replace, string[] cipher, StringBuilder[] plain) – For all occurrences of orig in cipher, substitutes the corresponding position with replace in plain 
+*	private void Substitute(char orig, char replace, string[] cipher, StringBuilder[] plain) – For all occurrences of orig in cipher, substitutes the corresponding position with replace in plain
     * Assume you call the method where the arguments are orig is 'n', replace is 'a', cipher is \{"fnj", "wnj"\} and plain is \{\{"b", "?", "?"\},\{"?", "?", "?"\}\}.  
     * **Leaving** the method, plain is now  \{ \{"b", "a", "?"\}, \{"?", "a", "?"\} \} .   
 
