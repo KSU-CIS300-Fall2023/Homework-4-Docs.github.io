@@ -160,7 +160,7 @@ DecryptionSearch takes the following parameters:
 
 DecryptionSearch should then use the following algorithm:
 * If partial represents a solved puzzle (i.e. it contains no ? characters, and each StringBuilder is a word in the trie), it will return true.
-* Otherwise, if any word in partial does NOT have a possible match in the trie (call its WildcardSearch method), return false.
+* Otherwise, if any word in partial does NOT have a possible match in the trie, return false.  This is iwhat the method PossibleCompletion() does.  
 * Otherwise, extend the recursive search by finding the first location of a ‘?’ in the StringBuilders in the partial array (word index and character position within the word). Get the ciphertext value, v, (in cipher) at that same word and character position. Then for each unused lowercase letter, ‘l’ (consult alphaUsed), use the Substitute method to replace the appropriate locations in partial with ‘l’ (i.e., replace the characters at locations in which cipher contains v). Recursively call DecryptionSearch with that substitution, and then if necessary, backtrack by undoing the recent substitution.  
     *   To backtrack, set the index in alphaUsed to false and call Substitute to replace 'l' with '?'.
 
